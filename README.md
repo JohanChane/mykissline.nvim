@@ -91,7 +91,13 @@ Steps to install:
 
 ## Examples (forks)
 
-*To provide more reference examples for others, you can add your configuration here.*
+### [JohanChane/mykissline.nvim](https://github.com/JohanChane/mykissline.nvim)
+
+-   Add git info
+
+![statusline](https://github.com/JohanChane/mykissline.nvim/assets/26107760/997bd410-7ec5-4c91-b27a-3e8aad280aeb)
+
+![tabline](https://github.com/JohanChane/mykissline.nvim/assets/26107760/e11d6fc5-0f99-4534-b461-6f1258407456)
 
 ### [JohanChane/kissline.nvim](https://github.com/JohanChane/kissline.nvim)
 
@@ -100,7 +106,3 @@ deus theme
 ![statusline](https://github.com/JohanChane/kissline.nvim/assets/26107760/4a3984da-9d63-486c-bcac-94a8a0f66de3)
 
 ![tabline](https://github.com/JohanChane/kissline.nvim/assets/26107760/ca563c2c-397f-4574-b723-6edff0139734)
-
-### [JohanChane/mykissline.nvim](https://github.com/JohanChane/mykissline.nvim)
-
-The `kissline.nvim` I am using.
