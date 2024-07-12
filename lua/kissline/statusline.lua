@@ -117,11 +117,46 @@ vim.api.nvim_set_hl(0, kiss_sts_line_nc_higroups.lineinfo, section_hl_nc_values.
 
 -- statusline cache: Save the statusline information that only updates when certain events occur. e.g. BufEnter, BufNew ...
 local sl_cache = {
-  --git_info = nil,
+  git_info_str = nil,
 }
 
+local function get_git_branch(cwd)
+  local result = vim.system({'git', 'rev-parse', '--abbrev-ref', 'HEAD'}, { text = true, cwd = cwd }):wait()
+  if result.code == 0 then
+    return result.stdout:gsub('\n', '')
+  else
+    return nil
+  end
+end
+
+local function get_git_behind(cwd)
+  local result = vim.system({'git', 'rev-list', '--count', '--left-only', '@{u}...HEAD'}, { text = true, cwd = cwd }):wait()
+  if result.code == 0 then
+    return result.stdout:gsub('\n', '')
+  else
+    return nil
+  end
+end
+
+local function git_info(cwd)
+  local branch = get_git_branch(cwd)
+  if not branch then
+    return ''
+  end
+
+  local behind = get_git_behind(cwd)
+  local info = (behind and behind ~= '0') and branch .. ' ↓' .. behind or branch
+  return info
+end
+
 local function update_sl_cache()
-  --git_info
+  local bufname = vim.fn.bufname()
+  local is_named_buf = bufname ~= ''
+  local is_file_open = vim.fn.filereadable(bufname) == 1
+
+  -- git info
+  local fullpath = vim.fn.expand(vim.fn.expand('%:p'))
+  sl_cache.git_info_str = (is_named_buf and is_file_open) and git_info(vim.fs.dirname(fullpath)) or ''
 end
 
 local function kiss_line_helper(is_active)
@@ -157,6 +192,7 @@ local function kiss_line_helper(is_active)
   })
 
   local file_section2 = table.concat({
+    sl_cache.git_info_str, sl_cache.git_info_str ~= '' and '|' or '',
     vim.bo.filetype, vim.bo.filetype ~= '' and '|' or '',
     vim.bo.fileencoding, vim.bo.fileencoding ~= '' and '|' or '',
     vim.bo.fileformat, ' ',
